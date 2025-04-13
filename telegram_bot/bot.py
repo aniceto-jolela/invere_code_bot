@@ -8,7 +8,10 @@ from helpers import (
     menu as hp_menu,
     octal as hp_octal,
     hexadecimal as hp_hexadecimal,
+    binary as hp_binary,
+    symbol as hp_symbol,
 )
+from convert import menu as cv_menu, cdecimal
 import about
 
 
@@ -83,22 +86,23 @@ def callback_handler(call):
         about.static_about(bot, call)
         show_main_menu(call.message)
     elif call.data == "menu_convert":
-        markup = types.InlineKeyboardMarkup(row_width=2)
-
-        item1 = types.InlineKeyboardButton("Decimal", callback_data="convet_decimal")
-        item2 = types.InlineKeyboardButton("Octal", callback_data="convert_octal")
-        item3 = types.InlineKeyboardButton(
-            "Hexadecimal", callback_data="convert_hexadecimal"
+        cv_menu.menu_convert(bot, call, types)
+    # -----------------------------------
+    # Sub menu convert
+    # -----------------------------------
+    elif call.data == "show_decimal":
+        cdecimal.show_decimal(bot, chat_id, message_id, types)
+    elif call.data == "convert_decimal_octal":
+        # bot.answer_callback_query(call.id)
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a decimal number that you want to convert to octal:",
         )
-        item4 = types.InlineKeyboardButton("Binary", callback_data="convert_binary")
-        back = types.InlineKeyboardButton("« Back", callback_data="main_menu")
-
-        markup.add(item1, item2, item3, item4)
-        markup.add(back)
-
-        bot.edit_message_text(
-            "🛠️ Convert Menu:", chat_id, message_id, reply_markup=markup
+        bot.register_next_step_handler(
+            msg, cdecimal.convert_decimal_octal(bot, call.message)
         )
+
+    ##########################################################################
     elif call.data == "menu_helpers":
         hp_menu.menu_helpers(bot, call, types)
     # -----------------------------------
@@ -149,6 +153,29 @@ def callback_handler(call):
         show_main_menu(call.message)
     elif call.data == "helpers_hexadecimal_all":
         hp_hexadecimal.helpers_hexadecimal_all(bot, call)
+        show_main_menu(call.message)
+
+    # Binary
+    elif call.data == "show_binary":
+        hp_binary.show_binary(bot, chat_id, message_id, types)
+    elif call.data == "helpers_binary_control":
+        hp_binary.helpers_binary_control(bot, call)
+        show_main_menu(call.message)
+    elif call.data == "helpers_binary_printable":
+        hp_binary.helpers_binary_printable(bot, call)
+        show_main_menu(call.message)
+    elif call.data == "helpers_binary_extended":
+        hp_binary.helpers_binary_extended(bot, call)
+        show_main_menu(call.message)
+    elif call.data == "helpers_binary_all":
+        hp_binary.helpers_binary_all(bot, call)
+        show_main_menu(call.message)
+
+    # Symbol
+    elif call.data == "show_symbol":
+        hp_symbol.show_symbol(bot, chat_id, message_id, types)
+    elif call.data == "helpers_symbol_printable":
+        hp_symbol.helpers_symbol_printable(bot, call)
         show_main_menu(call.message)
 
 
