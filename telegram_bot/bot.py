@@ -24,16 +24,15 @@ def show_main_menu(message):
     item2 = types.InlineKeyboardButton("Decode", callback_data="static_decode")
     item3 = types.InlineKeyboardButton("Convert", callback_data="menu_convert")
     item4 = types.InlineKeyboardButton("Helpers", callback_data="menu_helpers")
-    item5 = types.InlineKeyboardButton("About", callback_data="static_about")
+    item5 = types.InlineKeyboardButton("Division", callback_data="static_division")
+    item6 = types.InlineKeyboardButton("About", callback_data="static_about")
 
-    markup.add(item1, item2, item3, item4, item5)
+    markup.add(item1, item2, item3, item4, item5, item6)
 
     bot.send_message(
         message.chat.id,
         """
-        Welcome! I'm a bot powered by inverse-code library.
-
-        Please select an option:
+        Welcome! I'm a bot powered by inverse-code library.\n\n🤗 Please select an option:
         """,
         reply_markup=markup,
     )
@@ -58,9 +57,10 @@ def callback_handler(call):
         item2 = types.InlineKeyboardButton("Decode", callback_data="static_decode")
         item3 = types.InlineKeyboardButton("Convert", callback_data="menu_convert")
         item4 = types.InlineKeyboardButton("Helpers", callback_data="menu_helpers")
-        item5 = types.InlineKeyboardButton("About", callback_data="static_about")
+        item5 = types.InlineKeyboardButton("Division", callback_data="static_division")
+        item6 = types.InlineKeyboardButton("About", callback_data="static_about")
 
-        markup.add(item1, item2, item3, item4, item5)
+        markup.add(item1, item2, item3, item4, item5, item6)
         bot.edit_message_text("📋 Main Menu:", chat_id, message_id, reply_markup=markup)
     elif call.data == "static_encode":
         bot.answer_callback_query(call.id)
@@ -74,9 +74,16 @@ def callback_handler(call):
             call.message.chat.id, "Send me the text you want to decode:"
         )
         bot.register_next_step_handler(msg, process_decode_step)
+    elif call.data == "static_division":
+        msg = bot.send_message(
+            call.message.chat.id, "Send me the number you want to divide:"
+        )
+        bot.register_next_step_handler(msg, process_division_step)
     elif call.data == "static_about":
         about.static_about(bot, call)
         show_main_menu(call.message)
+
+    ##########################################################################
     elif call.data == "menu_convert":
         cv_menu.menu_convert(bot, call, types)
     # ----------------------------------------------------------------------
@@ -330,6 +337,28 @@ def process_decode_step(message):
         show_main_menu(message)
     except IndexError:
         bot.reply_to(message, "Please provide text to decode. Example: /decode xyz")
+    except Exception as e:
+        bot.reply_to(message, f"Error: {str(e)}")
+
+
+def process_division_step(message):
+    """Division"""
+    try:
+        text = message.text
+        base = text.split("/")
+        a = int(base[0])
+        b = int(base[1])
+        ab_float = a / b
+        ab_integer = int(a / b)
+        rest = a - (ab_integer * b)
+        bot.reply_to(
+            message,
+            f"Decimal part: {ab_float} \n Integer part: {ab_integer} \n Rest of the division: {rest}",
+        )
+        # Show menu again
+        show_main_menu(message)
+    except ValueError:
+        bot.reply_to(message, "Please provide number to divide. Example: /divide x/y")
     except Exception as e:
         bot.reply_to(message, f"Error: {str(e)}")
 

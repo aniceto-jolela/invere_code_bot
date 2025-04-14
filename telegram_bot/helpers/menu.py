@@ -16,4 +16,4 @@ def menu_helpers(bot, call, types):
 
     markup.add(item1, item2, item3, item4, item5)
     markup.add(back)
-    bot.edit_message_text("ℹ️ Helpers Menu:", chat_id, message_id, reply_markup=markup)
+    bot.edit_message_text("📜 Helpers Menu:", chat_id, message_id, reply_markup=markup)
