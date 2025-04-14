@@ -7,7 +7,7 @@ from helpers import (
     binary as hp_binary,
     symbol as hp_symbol,
 )
-from convert import menu as cv_menu, cdecimal, coctal, chexadecimal, cbinary
+from convert import menu as cv_menu, cdecimal, coctal, chexadecimal, cbinary, csymbol
 from inverse_code.convert import cdec
 import about
 from token_bot import bot, types
@@ -192,6 +192,34 @@ def callback_handler(call):
             "Send me a binary number that you want to convert to Symbol:",
         )
         bot.register_next_step_handler(msg, cbinary.convert_binary_symbol)
+
+    # Symbol
+    elif call.data == "show_convert_symbol":
+        csymbol.show_convert_symbol(chat_id, message_id)
+    elif call.data == "convert_symbol_decimal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a symbol number that you want to convert to decimal:",
+        )
+        bot.register_next_step_handler(msg, csymbol.convert_symbol_decimal)
+    elif call.data == "convert_symbol_octal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a symbol number that you want to convert to octal:",
+        )
+        bot.register_next_step_handler(msg, csymbol.convert_symbol_octal)
+    elif call.data == "convert_symbol_hexadecimal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a symbol number that you want to convert to hexadecimal:",
+        )
+        bot.register_next_step_handler(msg, csymbol.convert_symbol_hexadecimal)
+    elif call.data == "convert_symbol_binary":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a symbol number that you want to convert to Symbol:",
+        )
+        bot.register_next_step_handler(msg, csymbol.convert_symbol_binary)
 
     ##########################################################################
     elif call.data == "menu_helpers":

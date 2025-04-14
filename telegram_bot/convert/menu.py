@@ -3,7 +3,7 @@ def menu_convert(bot, call, types):
     chat_id = call.message.chat.id
     message_id = call.message.message_id
 
-    markup = types.InlineKeyboardMarkup(row_width=3)
+    markup = types.InlineKeyboardMarkup(row_width=2)
 
     item1 = types.InlineKeyboardButton("Decimal", callback_data="show_convert_decimal")
     item2 = types.InlineKeyboardButton("Octal", callback_data="show_convert_octal")
