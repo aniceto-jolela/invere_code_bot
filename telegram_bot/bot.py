@@ -1,8 +1,4 @@
-import os
-
-from dotenv import load_dotenv
 from inverse_code import encode, decode
-from telebot import types, TeleBot
 from helpers import (
     decimal as hp_decimal,
     menu as hp_menu,
@@ -11,13 +7,10 @@ from helpers import (
     binary as hp_binary,
     symbol as hp_symbol,
 )
-from convert import menu as cv_menu, cdecimal
+from convert import menu as cv_menu, cdecimal, coctal, chexadecimal
+from inverse_code.convert import cdec
 import about
-
-
-load_dotenv()
-
-bot = TeleBot(os.getenv("API_TOKEN_ACCESS"))
+from token_bot import bot, types
 
 
 # Create a message handler
@@ -66,7 +59,6 @@ def callback_handler(call):
         item3 = types.InlineKeyboardButton("Convert", callback_data="menu_convert")
         item4 = types.InlineKeyboardButton("Helpers", callback_data="menu_helpers")
         item5 = types.InlineKeyboardButton("About", callback_data="static_about")
-        back = types.InlineKeyboardButton("« Back", callback_data="main_menu")
 
         markup.add(item1, item2, item3, item4, item5)
         bot.edit_message_text("📋 Main Menu:", chat_id, message_id, reply_markup=markup)
@@ -87,20 +79,91 @@ def callback_handler(call):
         show_main_menu(call.message)
     elif call.data == "menu_convert":
         cv_menu.menu_convert(bot, call, types)
-    # -----------------------------------
+    # ----------------------------------------------------------------------
     # Sub menu convert
-    # -----------------------------------
-    elif call.data == "show_decimal":
-        cdecimal.show_decimal(bot, chat_id, message_id, types)
+    # ----------------------------------------------------------------------
+    elif call.data == "show_convert_decimal":
+        cdecimal.show_convert_decimal(chat_id, message_id)
     elif call.data == "convert_decimal_octal":
-        # bot.answer_callback_query(call.id)
         msg = bot.send_message(
             call.message.chat.id,
             "Send me a decimal number that you want to convert to octal:",
         )
-        bot.register_next_step_handler(
-            msg, cdecimal.convert_decimal_octal(bot, call.message)
+        bot.register_next_step_handler(msg, cdecimal.convert_decimal_octal)
+    elif call.data == "convert_decimal_hexadecimal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a decimal number that you want to convert to hexadecimal:",
         )
+        bot.register_next_step_handler(msg, cdecimal.convert_decimal_hexadecimal)
+    elif call.data == "convert_decimal_binary":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a decimal number that you want to convert to binary:",
+        )
+        bot.register_next_step_handler(msg, cdecimal.convert_decimal_binary)
+    elif call.data == "convert_decimal_symbol":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a decimal number that you want to convert to Symbol:",
+        )
+        bot.register_next_step_handler(msg, cdecimal.convert_decimal_symbol)
+
+    # Octal
+    elif call.data == "show_convert_octal":
+        coctal.show_convert_octal(chat_id, message_id)
+    elif call.data == "convert_octal_decimal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a octal number that you want to convert to decimal:",
+        )
+        bot.register_next_step_handler(msg, coctal.convert_octal_decimal)
+    elif call.data == "convert_octal_hexadecimal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a octal number that you want to convert to hexadecimal:",
+        )
+        bot.register_next_step_handler(msg, coctal.convert_octal_hexadecimal)
+    elif call.data == "convert_octal_binary":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a octal number that you want to convert to binary:",
+        )
+        bot.register_next_step_handler(msg, coctal.convert_octal_binary)
+    elif call.data == "convert_octal_symbol":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a octal number that you want to convert to Symbol:",
+        )
+        bot.register_next_step_handler(msg, coctal.convert_octal_symbol)
+
+    # Hexadecimal
+    elif call.data == "show_convert_hexadecimal":
+        chexadecimal.show_convert_hexadecimal(chat_id, message_id)
+    elif call.data == "convert_hexadecimal_decimal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a hexadecimal number that you want to convert to decimal:",
+        )
+        bot.register_next_step_handler(msg, chexadecimal.convert_hexadecimal_decimal)
+    elif call.data == "convert_hexadecimal_octal":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a hexadecimal number that you want to convert to octal:",
+        )
+        bot.register_next_step_handler(msg, chexadecimal.convert_hexadecimal_octal)
+    elif call.data == "convert_hexadecimal_binary":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a hexadecimal number that you want to convert to binary:",
+        )
+        bot.register_next_step_handler(msg, chexadecimal.convert_hexadecimal_binary)
+    elif call.data == "convert_hexadecimal_symbol":
+        msg = bot.send_message(
+            call.message.chat.id,
+            "Send me a hexadecimal number that you want to convert to Symbol:",
+        )
+        bot.register_next_step_handler(msg, chexadecimal.convert_hexadecimal_symbol)
 
     ##########################################################################
     elif call.data == "menu_helpers":
