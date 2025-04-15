@@ -8,9 +8,11 @@ It is a Test Bot of the [Inverse-Code](https://github.com/aniceto-jolela/inverse
 [![inverse code](https://img.shields.io/badge/inverse_code-1.2-vert?style=social)](https://pypi.org/project/inverse-code/)
 
 
+# Gif
+
+![inverse code gif](src/botinversecode.gif)
 
 # Config
-
 
 ```bash
 pip install pyTelegramBotAPI inverse-code
