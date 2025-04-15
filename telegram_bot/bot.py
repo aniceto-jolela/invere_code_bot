@@ -10,7 +10,7 @@ from helpers import (
 from convert import menu as cv_menu, cdecimal, coctal, chexadecimal, cbinary, csymbol
 from inverse_code.convert import cdec
 import about
-from token_bot import bot, types, time
+from token_bot import bot, types
 
 
 # Create a message handler
@@ -399,10 +399,6 @@ def decode_message(message):
 
 # Keep the bot running
 if __name__ == "__main__":
-    bot.remove_webhook()
-    while True:
-        try:
-            bot.polling(none_stop=True)
-        except Exception as e:
-            print(f"Polling error: {e}")
-            time.sleep(5)  # wait before retrying
+    # bot.remove_webhook()
+    # Start the bot
+    bot.polling(none_stop=True)
