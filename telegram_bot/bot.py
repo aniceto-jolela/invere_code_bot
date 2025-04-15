@@ -13,7 +13,7 @@ from helpers import (
 from convert import menu as cv_menu, cdecimal, coctal, chexadecimal, cbinary, csymbol
 from inverse_code.convert import cdec
 import about
-from token_bot import bot, types
+from token_bot import bot, types, time, logging
 
 
 # ------------------- Server ------------------------
@@ -418,9 +418,16 @@ def decode_message(message):
 
 # Keep the bot running
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    logging.info("Starting Flask server and Telegram bot")
+
     # Start Flask server in a separate thread to handle health checks
     Thread(target=run_flask).start()
 
-    # Start Telegram bot polling
     bot.remove_webhook()
-    bot.polling(none_stop=True)
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except Exception as e:
+            logging.error(f"Bot polling error: {e}")
+            time.sleep(5)  # wait before retrying
