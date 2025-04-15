@@ -5,9 +5,12 @@ It is a Test Bot of the [Inverse-Code](https://github.com/aniceto-jolela/inverse
 [![flask](https://img.shields.io/badge/flask-3.1.0-purple?style=for-the-badge)](https://flask.palletsprojects.com/en/stable/installation/)
 [![koyeb](https://img.shields.io/badge/deploy-koyeb-orange?style=for-the-badge)](https://app.koyeb.com)
 
+[![inverse code](https://img.shields.io/badge/inverse_code-1.2-vert?style=social)](https://pypi.org/project/inverse-code/)
+
 
 
 # Config
+
 
 ```bash
 pip install pyTelegramBotAPI inverse-code
@@ -21,6 +24,7 @@ pip install python-dotenv
 pip freeze > requirements.txt
 ```
 
+#### To create a simple server
 ```bash
 pip install Flask
 ```
