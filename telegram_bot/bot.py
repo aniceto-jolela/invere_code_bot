@@ -1,3 +1,6 @@
+from flask import Flask
+from threading import Thread
+
 from inverse_code import encode, decode
 from helpers import (
     decimal as hp_decimal,
@@ -11,6 +14,22 @@ from convert import menu as cv_menu, cdecimal, coctal, chexadecimal, cbinary, cs
 from inverse_code.convert import cdec
 import about
 from token_bot import bot, types
+
+
+# ------------------- Server ------------------------
+app = Flask(__name__)
+
+
+@app.route("/")
+def health():
+    return "OK", 200
+
+
+def run_flask():
+    app.run(host="0.0.0.0", port=8000)
+
+
+# -------------------------------------------
 
 
 # Create a message handler
@@ -399,6 +418,9 @@ def decode_message(message):
 
 # Keep the bot running
 if __name__ == "__main__":
-    # bot.remove_webhook()
-    # Start the bot
+    # Start Flask server in a separate thread to handle health checks
+    Thread(target=run_flask).start()
+
+    # Start Telegram bot polling
+    bot.remove_webhook()
     bot.polling(none_stop=True)
