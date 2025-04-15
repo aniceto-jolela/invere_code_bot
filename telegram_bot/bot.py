@@ -1,5 +1,4 @@
-from flask import Flask
-from threading import Thread
+from flask import Flask, request
 
 from inverse_code import encode, decode
 from helpers import (
@@ -20,13 +19,16 @@ from token_bot import bot, types, time, logging
 app = Flask(__name__)
 
 
-@app.route("/")
-def health():
+@app.route(f"/{bot.token}", methods=["POST"])
+def webhook():
+    update = request.get_json(force=True)
+    bot.process_new_updates([update])
     return "OK", 200
 
 
-def run_flask():
-    app.run(host="0.0.0.0", port=8000)
+@app.route("/")
+def health():
+    return "OK", 200
 
 
 # -------------------------------------------
@@ -422,12 +424,5 @@ if __name__ == "__main__":
     logging.info("Starting Flask server and Telegram bot")
 
     # Start Flask server in a separate thread to handle health checks
-    Thread(target=run_flask).start()
-
-    bot.remove_webhook()
-    while True:
-        try:
-            bot.polling(none_stop=True)
-        except Exception as e:
-            logging.error(f"Bot polling error: {e}")
-            time.sleep(5)  # wait before retrying
+    bot.set_webhook(url="https://creepy-monkey-hard-95f3c1b7.koyeb.app/" + bot.token)
+    app.run(host="0.0.0.0", port=8000)
