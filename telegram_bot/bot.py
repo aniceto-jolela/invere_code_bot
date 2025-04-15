@@ -397,5 +397,7 @@ def decode_message(message):
         bot.reply_to(message, f"Error: {str(e)}")
 
 
-# Start the bot
-bot.polling()
+# Keep the bot running
+if __name__ == "__main__":
+    bot.remove_webhook()
+    bot.polling(none_stop=True)
